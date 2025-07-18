@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepansh Sharma - Data Science Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --background-light: #f9fafb;
+            --text-light: #111827;
+            --primary-light: #0ea5e9; /* sky-500 */
+            --glass-light: rgba(249, 250, 251, 0.7);
+            --border-light: rgba(0, 0, 0, 0.08);
+
+            --background-dark: #020617; /* slate-950 */
+            --text-dark: #e2e8f0;
+            --primary-dark: #38bdf8; /* sky-400 */
+            --glass-dark: rgba(15, 23, 42, 0.6);
+            --border-dark: rgba(255, 255, 255, 0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* --- Theme Colors --- */
+        body { background-color: var(--background-light); color: var(--text-light); }
+        .dark body { background-color: var(--background-dark); color: var(--text-dark); }
+        .glass-effect { 
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            background: var(--glass-light);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-light);
+        }
+        .dark .glass-effect { background: var(--glass-dark); border: 1px solid var(--border-dark); }
+        .text-primary { color: var(--primary-light); }
+        .dark .text-primary { color: var(--primary-dark); }
+        .bg-primary { background-color: var(--primary-light); }
+        .dark .bg-primary { background-color: var(--primary-dark); }
+        .border-primary { border-color: var(--primary-light); }
+        .dark .border-primary { border-color: var(--primary-dark); }
+        .hover\:text-primary:hover { color: var(--primary-light); }
+        .dark .hover\:text-primary:hover { color: var(--primary-dark); }
+        .hover\:bg-primary-dark:hover { background-color: #0c87bf; }
+        .shadow-primary { box-shadow: 0 0 25px -5px var(--primary-dark); }
+        .dark .shadow-primary { box-shadow: 0 0 45px -10px var(--primary-dark); }
+
+        /* --- Preloader --- */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: var(--background-dark); display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out, visibility 0.5s ease-out; }
+        .loader { border: 4px solid rgba(255, 255, 255, 0.2); border-left-color: var(--primary-dark); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- Hero Section & Particles --- */
+        #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; }
+        .hero-section { min-height: 100vh; position: relative; }
+        .profile-image-container { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+
+        /* --- Typing Animation --- */
+        .typing-cursor { display: inline-block; width: 3px; height: 2rem; background-color: var(--primary-dark); animation: blink 0.8s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* --- Timeline --- */
+        .timeline-item { border-left: 2px solid; }
+        .dark .timeline-item { border-color: var(--border-dark); }
+        .timeline-item { border-color: var(--border-light); }
+        .timeline-dot { position: absolute; left: -9px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; border-radius: 50%; border: 3px solid; }
+        
+        /* --- Project Card Tilt --- */
+        .project-card { transform-style: preserve-3d; transition: transform 0.5s; }
+        .project-card:hover { transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)); }
+
+        /* --- Cursor Trail --- */
+        .cursor-trail { position: fixed; width: 10px; height: 10px; background-color: var(--primary-dark); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: transform 0.1s ease-out, opacity 0.3s; z-index: 10000; opacity: 0; }
+        body:hover .cursor-trail { opacity: 0.5; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="cursor-trail"></div>
+
+    <!-- Preloader -->
+    <div id="preloader"><div class="loader"></div></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#home" class="text-xl sm:text-2xl font-bold tracking-tight">Deepansh Sharma</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="hover:text-primary transition-colors duration-300">About</a>
+                <a href="#journey" class="hover:text-primary transition-colors duration-300">Journey</a>
+                <a href="#skills" class="hover:text-primary transition-colors duration-300">Skills</a>
+                <a href="#projects" class="hover:text-primary transition-colors duration-300">Projects</a>
+                <a href="#contact" class="hover:text-primary transition-colors duration-300">Contact</a>
+                <button id="theme-toggle" class="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-slate-950">
+                    <i data-lucide="sun" class="block dark:hidden w-5 h-5"></i>
+                    <i data-lucide="moon" class="hidden dark:block w-5 h-5"></i>
+                </button>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none"><i data-lucide="menu" class="w-6 h-6"></i></button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg">
+            <a href="#about" class="mobile-link block py-2 px-4 text-sm hover:bg-gray-200 dark:hover:bg-slate-800">About</a>
+            <a href="#journey" class="mobile-link block py-2 px-4 text-sm hover:bg-gray-200 dark:hover:bg-slate-800">Journey</a>
+            <a href="#skills" class="mobile-link block py-2 px-4 text-sm hover:bg-gray-200 dark:hover:bg-slate-800">Skills</a>
+            <a href="#projects" class="mobile-link block py-2 px-4 text-sm hover:bg-gray-200 dark:hover:bg-slate-800">Projects</a>
+            <a href="#contact" class="mobile-link block py-2 px-4 text-sm hover:bg-gray-200 dark:hover:bg-slate-800">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section flex items-center justify-center text-center px-6">
+            <div id="particles-js"></div>
+            <div class="z-10">
+                <div class="relative inline-block mb-6 profile-image-container" data-aos="zoom-in">
+                    <div class="w-40 h-40 rounded-full bg-gradient-to-br from-sky-400 to-sky-600 p-1 shadow-lg shadow-primary">
+                        <!-- IMAGE FIX: This now points to a local file. See instructions above. -->
+                        <img src="assets/profile.jpg" alt="Deepansh Sharma" class="rounded-full w-full h-full object-cover">
+                    </div>
+                </div> 
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4" data-aos="fade-down" data-aos-delay="100">Hi, I'm <span class="text-primary">Deepansh Sharma</span></h1>
+                <p class="text-lg sm:text-xl md:text-3xl mb-8 font-medium" data-aos="fade-down" data-aos-delay="200"><span id="typing-text"></span><span class="typing-cursor"></span></p>
+                <div class="flex justify-center items-center space-x-6 mb-8" data-aos="fade-up" data-aos-delay="300">
+                    <a href="https://github.com/deepanshhcoder" target="_blank" class="hover:text-primary transition-transform duration-300 transform hover:-translate-y-1"><i data-lucide="github" class="w-7 h-7"></i></a>
+                    <a href="https://www.linkedin.com/in/deepansh-sharma12" target="_blank" class="hover:text-primary transition-transform duration-300 transform hover:-translate-y-1"><i data-lucide="linkedin" class="w-7 h-7"></i></a>
+                    <a href="https://www.instagram.com/deepanshsharma__?igsh=MWd5ejhvYzg0dmRkaQ==" target="_blank" class="hover:text-primary transition-transform duration-300 transform hover:-translate-y-1"><i data-lucide="instagram" class="w-7 h-7"></i></a>
+                </div>
+                <div data-aos="fade-up" data-aos-delay="400">
+                     <a href="DeepanshSharmaResume.pdf" download="Deepansh_Sharma_Resume.pdf" class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        Download Resume
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 sm:py-24">
+            <div class="container mx-auto px-6">
+                <div data-aos="fade-up">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-2">About Me</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-12"></div>
+                </div>
+                <div class="max-w-3xl mx-auto glass-effect rounded-xl p-6 sm:p-8" data-aos="fade-up" data-aos-delay="100">
+                    <p class="text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                        I am a detail-oriented and versatile Computer Science undergraduate with a specialization in Data Science with hands-on experience in projects. Good at problem-solving, learning quickly, and collaborating in team environments. Eager to contribute to innovative IT solutions across various domains.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Journey Section -->
+        <section id="journey" class="py-20 sm:py-24 bg-gray-50 dark:bg-slate-900/70">
+            <div class="container mx-auto px-6">
+                <div data-aos="fade-up">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-2">My Journey</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-12"></div>
+                </div>
+                <div class="max-w-3xl mx-auto">
+                    <div class="relative timeline-item pl-8 py-6" data-aos="fade-left">
+                        <div class="timeline-dot bg-primary border-primary"></div>
+                        <p class="text-sm text-primary font-semibold">2022 - 2026</p>
+                        <h3 class="text-lg sm:text-xl font-bold mt-1">B.Tech, Computer Science (Data Science)</h3>
+                        <p class="text-slate-500 dark:text-slate-400">Hindustan College of Science and Technology</p>
+                    </div>
+                     <div class="relative timeline-item pl-8 py-6" data-aos="fade-left" data-aos-delay="100">
+                        <div class="timeline-dot bg-background-light dark:bg-background-dark border-primary"></div>
+                        <p class="text-sm text-primary font-semibold">Jul 2025 - Aug 2025</p>
+                        <h3 class="text-lg sm:text-xl font-bold mt-1">Data Science Intern</h3>
+                        <p class="text-slate-500 dark:text-slate-400">Brainwave Matrix Solutions</p>
+                    </div>
+                    <div class="relative timeline-item pl-8 py-6" data-aos="fade-left" data-aos-delay="200">
+                        <div class="timeline-dot bg-background-light dark:bg-background-dark border-primary"></div>
+                        <p class="text-sm text-primary font-semibold">Apr 2025 - Jun 2025</p>
+                        <h3 class="text-lg sm:text-xl font-bold mt-1">Data Engineering Intern</h3>
+                        <p class="text-slate-500 dark:text-slate-400">AWS Academy</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 sm:py-24">
+            <div class="container mx-auto px-6">
+                <div data-aos="fade-up">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-2">Technical Skills</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-12"></div>
+                </div>
+                <div class="max-w-6xl mx-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 text-center">
+                    <!-- SKILL LOGOS FIX: Using official logos from a reliable CDN -->
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="50">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">Python</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">C</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="150">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" alt="SQL" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">SQL</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="AI/ML" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">AI/ML</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="300">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" alt="NumPy" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">NumPy</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="350">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" alt="Pandas" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">Pandas</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="400">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg" alt="Matplotlib" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">Matplotlib</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="450">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Scikit_learn_logo_small.svg/1200px-Scikit_learn_logo_small.svg.png" alt="Scikit-learn" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 object-contain">
+                        <p class="font-semibold text-xs sm:text-sm">Scikit-learn</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="500">
+                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg" alt="OpenCV" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">OpenCV</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4 transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="550">
+                        <img src="https://cdn.worldvectorlogo.com/logos/tensorflow-2.svg" alt="TensorFlow" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2">
+                        <p class="font-semibold text-xs sm:text-sm">TensorFlow</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications" class="py-20 sm:py-24 bg-gray-50 dark:bg-slate-900/70">
+            <div class="container mx-auto px-6">
+                <div data-aos="fade-up">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-2">Certifications & Training</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-12"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="glass-effect rounded-xl p-6" data-aos="fade-up" data-aos-delay="100">
+                        <i data-lucide="award" class="w-10 h-10 text-primary mb-4"></i>
+                        <h3 class="font-bold text-lg mb-1">Google Data Analytics</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Coursera</p>
+                    </div>
+                    <div class="glass-effect rounded-xl p-6" data-aos="fade-up" data-aos-delay="200">
+                        <i data-lucide="award" class="w-10 h-10 text-primary mb-4"></i>
+                        <h3 class="font-bold text-lg mb-1">Google IT Automation with Python</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Coursera</p>
+                    </div>
+                    <div class="glass-effect rounded-xl p-6" data-aos="fade-up" data-aos-delay="300">
+                        <i data-lucide="award" class="w-10 h-10 text-primary mb-4"></i>
+                        <h3 class="font-bold text-lg mb-1">Data Analysis with Power BI</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">AICTE-EduSkills</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 sm:py-24">
+            <div class="container mx-auto px-6">
+                <div data-aos="fade-up">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-2">My Projects</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-12"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="project-card glass-effect rounded-xl overflow-hidden transform transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                        <img src="https://placehold.co/600x400/020617/38bdf8?text=Weather+Dashboard" alt="Weather Dashboard" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Real-Time Weather Dashboard</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm">A dynamic weather dashboard built in Power BI using a live Weather API to present key weather metrics in an interactive format.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Power BI</span>
+                                <span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">API</span>
+                            </div>
+                            <a href="https://github.com/deepanshhcoder" target="_blank" class="font-semibold text-primary hover:underline">View on GitHub &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="project-card glass-effect rounded-xl overflow-hidden transform transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                        <img src="https://placehold.co/600x400/020617/38bdf8?text=Movie+Analysis" alt="Movie Data Analysis App" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Movie Data Analysis App</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm">Interactive dashboard using Streamlit to explore Indian movie trends with dynamic filters and visualizations.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Streamlit</span>
+                                <span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Pandas</span>
+                            </div>
+                            <a href="https://github.com/deepanshhcoder" target="_blank" class="font-semibold text-primary hover:underline">View on GitHub &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="project-card glass-effect rounded-xl overflow-hidden transform transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                        <img src="https://placehold.co/600x400/020617/38bdf8?text=Face+Recognition" alt="Face Recognition System" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Face Recognition Attendance</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm">Automated system that captures and verifies faces in real-time to mark attendance, eliminating manual processes.</p>
+                             <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Python</span>
+                                <span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">OpenCV</span>
+                            </div>
+                            <a href="https://github.com/deepanshhcoder" target="_blank" class="font-semibold text-primary hover:underline">View on GitHub &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 sm:py-24 bg-gray-50 dark:bg-slate-900/70">
+            <div class="container mx-auto px-6" data-aos="fade-up">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-2">Get In Touch</h2>
+                <div class="w-24 h-1 bg-primary mx-auto mb-12"></div>
+                <div class="max-w-xl mx-auto glass-effect rounded-xl p-6 sm:p-8">
+                    <p class="text-center text-slate-600 dark:text-slate-400 mb-8">Have a project in mind or just want to say hello? My inbox is always open. Fill out the form below and I'll get back to you!</p>
+                    <form action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+                        <div class="mb-4">
+                            <label for="name" class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300">Your Name</label>
+                            <input type="text" id="name" name="name" required class="w-full px-3 py-2 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300">Your Email</label>
+                            <input type="email" id="email" name="email" required class="w-full px-3 py-2 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300">Message</label>
+                            <textarea id="message" name="message" rows="4" required class="w-full px-3 py-2 bg-white/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="bg-primary text-white font-bold py-3 px-8 rounded-full hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 shadow-lg">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-8 text-center text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800">
+        <p>&copy; 2024 Deepansh Sharma. Crafted with passion.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        lucide.createIcons();
+        AOS.init({ duration: 800, once: true });
+
+        window.addEventListener('load', () => {
+            document.getElementById('preloader').style.opacity = '0';
+            document.getElementById('preloader').style.visibility = 'hidden';
+        });
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlEl.classList.add('dark');
+        } else {
+            htmlEl.classList.remove('dark');
+        }
+        themeToggle.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
+            updateParticlesTheme();
+        });
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // TYPING ANIMATION FIX: Rewritten for accuracy
+        const typingText = document.getElementById('typing-text');
+        const phrases = ["A Passionate Developer", "A Data Science Enthusiast", "A Creative Problem-Solver"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                // Deleting
+                typingText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                // Typing
+                typingText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 75 : 150;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                // Finished typing, pause and then start deleting
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                // Finished deleting, pause and then start typing next phrase
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', type);
+        
+        function updateParticlesTheme() {
+            const isDark = htmlEl.classList.contains('dark');
+            const particleColor = isDark ? "#38bdf8" : "#0ea5e9";
+            particlesJS('particles-js', {
+              particles: { number: { value: 60, density: { enable: true, value_area: 800 } }, color: { value: particleColor }, shape: { type: "circle" }, opacity: { value: 0.5, random: true }, size: { value: 3, random: true }, line_linked: { enable: true, distance: 150, color: particleColor, opacity: 0.4, width: 1 }, move: { enable: true, speed: 1, direction: "none", random: true, straight: false, out_mode: "out" } },
+              interactivity: { detect_on: "canvas", events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true }, modes: { grab: { distance: 140, line_linked: { opacity: 1 } }, push: { particles_nb: 4 } } },
+              retina_detect: true
+            });
+        }
+        updateParticlesTheme();
+
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const rotateX = (y / rect.height - 0.5) * -15;
+                const rotateY = (x / rect.width - 0.5) * 15;
+                card.style.setProperty('--rotateX', `${rotateX}deg`);
+                card.style.setProperty('--rotateY', `${rotateY}deg`);
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.setProperty('--rotateX', '0deg');
+                card.style.setProperty('--rotateY', '0deg');
+            });
+        });
+
+        const cursorTrail = document.querySelector('.cursor-trail');
+        window.addEventListener('mousemove', e => {
+            cursorTrail.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            if (!cursorTrail.style.opacity) cursorTrail.style.opacity = '0.5';
+        });
+    </script>
+</body>
+</html>
